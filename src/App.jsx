@@ -19,12 +19,21 @@ export default function App() {
         product.skus.includes((item) => item.size === parseInt(size))
       )
     : products;
+
   useEffect(() => {
-    getProducts("shoes")
-      .then((response) => setProducts(response))
-      .catch(setError)
-      .finally(() => setLoading(false));
+    async function init() {
+      try {
+        const response = await getProducts("shoes");
+        setProducts(response);
+      } catch (e) {
+        setError(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    init();
   }, [size]);
+
   function renderProduct(p) {
     return (
       <div key={p.id} className="product">
