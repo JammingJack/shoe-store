@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import "./App.css";
 import Footer from "./Footer";
 import Header from "./Header";
+import Spinner from "./Spinner";
 import { getProducts } from "./services/productService";
 
 export default function App() {
@@ -10,6 +11,8 @@ export default function App() {
   const [products, setProducts] = useState([]);
   //async error handling
   const [error, setError] = useState(null);
+  //loading handling
+  const [loading, setLoading] = useState(true);
 
   const filteredProducts = size
     ? products.filter((product) =>
@@ -19,7 +22,8 @@ export default function App() {
   useEffect(() => {
     getProducts("shoes")
       .then((response) => setProducts(response))
-      .catch(setError);
+      .catch(setError)
+      .finally(() => setLoading(false));
   }, [size]);
   function renderProduct(p) {
     return (
@@ -34,6 +38,7 @@ export default function App() {
   }
 
   if (error) throw error;
+  if (loading) return <Spinner />; //show spinner if is loading
   return (
     <>
       <div className="content">
