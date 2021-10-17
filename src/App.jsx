@@ -4,35 +4,21 @@ import "./App.css";
 import Footer from "./Footer";
 import Header from "./Header";
 import Spinner from "./Spinner";
-import { getProducts } from "./services/productService";
+import useFetch from "./services/useFetch";
 
 export default function App() {
   const [size, setSize] = useState("");
-  const [products, setProducts] = useState([]);
-  //async error handling
-  const [error, setError] = useState(null);
-  //loading handling
-  const [loading, setLoading] = useState(true);
+  const {
+    data: products,
+    error,
+    loading,
+  } = useFetch("products?category=shoes");
 
   const filteredProducts = size
     ? products.filter((product) =>
         product.skus.includes((item) => item.size === parseInt(size))
       )
     : products;
-
-  useEffect(() => {
-    async function init() {
-      try {
-        const response = await getProducts("shoes");
-        setProducts(response);
-      } catch (e) {
-        setError(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    init();
-  }, [size]);
 
   function renderProduct(p) {
     return (
