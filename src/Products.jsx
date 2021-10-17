@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import Spinner from "./Spinner";
 import useFetch from "./services/useFetch";
+import { useParams } from "react-router-dom";
 
-export default function App() {
+export default function Products() {
   const [size, setSize] = useState("");
+  const { category } = useParams();
   const {
     data: products,
     error,
     loading,
-  } = useFetch("products?category=shoes");
-
-  const filteredProducts = size
-    ? products.filter((product) =>
-        product.skus.includes((item) => item.size === parseInt(size))
-      )
-    : products;
+  } = useFetch("products?category" + category);
 
   function renderProduct(p) {
     return (
@@ -27,6 +23,12 @@ export default function App() {
       </div>
     );
   }
+
+  const filteredProducts = size
+    ? products.filter((product) =>
+        product.skus.find((item) => item.size === parseInt(size))
+      )
+    : products;
 
   if (error) throw error;
   if (loading) return <Spinner />; //show spinner if is loading
