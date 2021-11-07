@@ -14,12 +14,12 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <NavLink to="/shoes" activeClassName={activeStyle}>
+            <NavLink to="/shoes" activeStyle={activeStyle}>
               Shoes
             </NavLink>
           </li>
           <li>
-            <NavLink to="/cart" activeClassName={activeStyle}>
+            <NavLink to="/cart" activeStyle={activeStyle}>
               Cart
             </NavLink>
           </li>
