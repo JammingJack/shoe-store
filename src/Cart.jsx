@@ -56,7 +56,7 @@ export default function Cart({ cart, updateQuantity }) {
           : `${numItemsInCart} item${numItemsInCart > 1 ? "s" : ""} in my cart`}
       </h1>
       <ul>{cart.map(renderItem)}</ul>
-      {numItemsInCart > 1 && (
+      {cart.length > 0 && (
         <button
           className="btn btn-primay"
           onClick={() => navigate("/checkout")}

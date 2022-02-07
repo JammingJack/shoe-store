@@ -1,4 +1,11 @@
 import React, { useState } from "react";
+//submit status enum
+const STATUS = {
+  IDLE: "IDLE",
+  SUBMITTED: "SUBMITTED",
+  SUBMITTING: "SUBMITTING",
+  COMPLETED: "COMPLETED",
+};
 
 // Declaring outside component to avoid recreation on each render
 const emptyAddress = {
@@ -8,9 +15,16 @@ const emptyAddress = {
 
 export default function Checkout({ cart }) {
   const [address, setAddress] = useState(emptyAddress);
+  const [status, setStatus] = useState(STATUS.IDLE);
 
   function handleChange(e) {
-    // TODO
+    e.persist(); //to avoid react gabage collecting the event before exploitation
+    setAddress((currAddress) => {
+      return {
+        ...currAddress,
+        [e.target.id]: e.target.value,
+      };
+    });
   }
 
   function handleBlur(event) {
@@ -18,7 +32,8 @@ export default function Checkout({ cart }) {
   }
 
   async function handleSubmit(event) {
-    // TODO
+    event.preventDefault();
+    setStatus(STATUS.SUBMITTING);
   }
 
   return (
@@ -57,6 +72,7 @@ export default function Checkout({ cart }) {
         <div>
           <input
             type="submit"
+            disabled={status === STATUS.SUBMITTING}
             className="btn btn-primary"
             value="Save Shipping Info"
           />
