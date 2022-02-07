@@ -12,7 +12,7 @@ export default function useFetch(url) {
     async function init() {
       try {
         const response = await fetch(baseUrl + url);
-        if (response.ok) {
+        if (response.ok) {  
           const json = await response.json();
           setData(json);
         } else {
