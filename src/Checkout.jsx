@@ -19,6 +19,10 @@ export default function Checkout({ cart, emptyCart }) {
   const [status, setStatus] = useState(STATUS.IDLE);
   const [saveError, setSaveError] = useState(null);
 
+  //Derived State
+  const errors = getErrors(address);
+  const isValid = Object.keys(errors).length === 0;
+
   function handleChange(e) {
     e.persist(); //to avoid react gabage collecting the event before exploitation
     setAddress((currAddress) => {
@@ -36,19 +40,41 @@ export default function Checkout({ cart, emptyCart }) {
   async function handleSubmit(event) {
     event.preventDefault();
     setStatus(STATUS.SUBMITTING);
-    try {
-      await saveShippingAddress(address);
-      setStatus(STATUS.COMPLETED);
-      emptyCart();
-    } catch (e) {
-      setSaveError(e);
+    if (isValid) {
+      try {
+        await saveShippingAddress(address);
+        setStatus(STATUS.COMPLETED);
+        emptyCart();
+      } catch (e) {
+        setSaveError(e);
+      }
+    } else {
+      setStatus(STATUS.SUBMITTED);
     }
   }
+
+  function getErrors(address) {
+    const result = {};
+    if (!address.city) result.city = "City is required!";
+    if (!address.country) result.country = "Country is required!";
+    return result;
+  }
+
   if (saveError) throw saveError;
   if (status === STATUS.COMPLETED) return <h1>Thank you for shopping</h1>;
   return (
     <>
       <h1>Shipping Info</h1>
+      {!isValid && status === STATUS.SUBMITTED && (
+        <div role="alert">
+          <h2>Please correct the following errors:</h2>
+          <ul>
+            {Object.keys(errors).map((key) => (
+              <li>{errors[key]}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="city">City</label>
