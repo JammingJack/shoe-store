@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -8,7 +8,19 @@ import Cart from "./Cart";
 import { Routes, Route } from "react-router-dom";
 
 export default function App() {
-  const [cart, setCart] = useState([]); //[{id, sku, quanity},]
+  const [cart, setCart] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("cart")) ?? [];
+    } catch (e) {
+      console.log("could not load cart off local storage");
+      return [];
+    }
+  }); //[{id, sku, quanity},]
+
+  //persisting the cart into local storage
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   function addToCart(id, sku) {
     setCart((items) => {

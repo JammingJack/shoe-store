@@ -4,7 +4,6 @@ import Spinner from "./Spinner";
 
 export default function Cart({ cart, updateQuantity }) {
   const urls = cart.map((item) => `products/${item.id}`);
-  console.log(urls);
   const { data: products, error, loading } = useFetchAll(urls);
 
   if (loading) return <Spinner />;
