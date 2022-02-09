@@ -16,7 +16,7 @@ export default function App() {
       console.log("could not load cart off local storage");
       return [];
     }
-  }); //[{id, sku, quanity},]
+  }); //a cart is an array of objects[{id, sku, quanity},]
 
   //persisting the cart into local storage
   useEffect(() => {
@@ -43,8 +43,8 @@ export default function App() {
         );
   }
 
-  function emptyCart(){
-    setCart([])
+  function emptyCart() {
+    setCart([]);
   }
   return (
     <>
@@ -62,7 +62,10 @@ export default function App() {
               path="/cart"
               element={<Cart cart={cart} updateQuantity={updateQuantity} />}
             />
-            <Route path="/checkout" element={<Checkout cart={cart} emptyCart={emptyCart} />}></Route>
+            <Route
+              path="/checkout"
+              element={<Checkout cart={cart} emptyCart={emptyCart} />}
+            ></Route>
           </Routes>
         </main>
       </div>
