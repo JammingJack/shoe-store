@@ -8,6 +8,7 @@ import Cart from "./Cart";
 import { Routes, Route } from "react-router-dom";
 import Checkout from "./Checkout";
 import cartReducer from "./cartReducer";
+import { CartContext } from "./CartContext";
 
 let initialCart;
 
@@ -27,7 +28,7 @@ export default function App() {
   }, [cart]);
 
   return (
-    <>
+    <CartContext.Provider value={{ cart, dispatch }}>
       <div className="content">
         <Header />
         <main>
@@ -38,10 +39,7 @@ export default function App() {
               path="/:category/:id"
               element={<Detail dispatch={dispatch} />}
             />
-            <Route
-              path="/cart"
-              element={<Cart cart={cart} dispatch={dispatch} />}
-            />
+            <Route path="/cart" element={<Cart />} />
             <Route
               path="/checkout"
               element={<Checkout cart={cart} dispatch={dispatch} />}
@@ -50,6 +48,6 @@ export default function App() {
         </main>
       </div>
       <Footer />
-    </>
+    </CartContext.Provider>
   );
 }
